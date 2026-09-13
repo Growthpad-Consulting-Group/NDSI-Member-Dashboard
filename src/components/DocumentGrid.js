@@ -1,11 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import SimpleModal from "@/components/SimpleModal";
-import {
-  listFilesInFolder,
-  listSubfoldersInFolder,
-  listAllFilesByPrefix,
-} from "@/utils/imageKitService";
+import { fetchFilesByPrefix, fetchSubfolders } from "@/utils/filesClient";
 import DocumentCard from "./DocumentCard";
 
 // Helper function to download file
@@ -151,7 +147,7 @@ const DocumentGrid = ({
     if (!showSubfolderFilter) return;
     const fetchSubfolders = async () => {
       try {
-        const folders = await listSubfoldersInFolder(`/${folder}`);
+        const folders = await fetchSubfolders(`/${folder}`);
         setSubfolders(folders);
       } catch {
         setSubfolders([]);
@@ -166,7 +162,7 @@ const DocumentGrid = ({
       setError(null);
       try {
         console.log('Fetching all files with prefix:', `/${folder}`);
-        let docsRaw = await listAllFilesByPrefix(`/${folder}`);
+        let docsRaw = await fetchFilesByPrefix(`/${folder}`);
 
         console.log('Raw documents from API:', docsRaw);
 

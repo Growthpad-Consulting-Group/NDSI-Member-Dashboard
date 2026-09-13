@@ -7,7 +7,6 @@ import useSidebar from "@/hooks/useSidebar";
 import { useUser } from "@/context/UserContext";
 import useSignOut from "@/hooks/useSignOut";
 import { FaFilePdf, FaFileWord } from "react-icons/fa";
-import { listFilesInFolder } from "@/utils/imageKitService";
 import SimpleModal from "@/components/SimpleModal";
 import DocumentGrid from "@/components/DocumentGrid";
 import { useTheme } from '@/hooks/useTheme';

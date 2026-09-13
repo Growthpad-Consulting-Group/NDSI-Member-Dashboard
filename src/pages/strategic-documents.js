@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import useSidebar from '@/hooks/useSidebar';
 import { useUser } from '@/context/UserContext';
 import useSignOut from '@/hooks/useSignOut';
-import { listFilesInFolder } from '@/utils/imageKitService';
+import { fetchFilesByPrefix } from '@/utils/filesClient';
 import SimpleModal from '@/components/SimpleModal';
 import DocumentGrid from '@/components/DocumentGrid';
 import { useTheme } from '@/hooks/useTheme';
@@ -44,7 +44,7 @@ const StrategicDocumentsPage = () => {
             setLoading(true);
             setError(null);
             try {
-                const files = await listFilesInFolder('/StrategicDocs');
+                const files = await fetchFilesByPrefix('/StrategicDocs');
                 // Only keep PDF and DOCX
                 const docs = files.filter(f => {
                     const ext = f.name.split('.').pop().toLowerCase();

@@ -6,7 +6,6 @@ import useSidebar from '@/hooks/useSidebar';
 import { useTheme } from '@/hooks/useTheme';
 import { toast } from 'react-hot-toast';
 import { Icon } from '@iconify/react';
-import { listAllFilesByPrefix } from '@/utils/imageKitService';
 import UploadGallery from '@/components/UploadGallery';
 import Select from 'react-select';
 

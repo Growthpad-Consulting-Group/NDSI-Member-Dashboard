@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useUser } from '@/context/UserContext';
 import { Icon } from '@iconify/react';
-import { listAllFilesByPrefix } from '@/utils/imageKitService';
+import { fetchFilesByPrefix } from '@/utils/filesClient';
 import SimpleModal from './SimpleModal';
 import toast from 'react-hot-toast';
 
@@ -37,7 +37,7 @@ const WorkingGroupDocumentation = ({ toggleSidebar, isSidebarOpen, mode, toggleM
             setError(null);
             try {
                 console.log('Fetching all working group files');
-                const files = await listAllFilesByPrefix('/WorkingGroups');
+                const files = await fetchFilesByPrefix('/WorkingGroups');
                 
                 const docs = files
                     .filter(f => {
