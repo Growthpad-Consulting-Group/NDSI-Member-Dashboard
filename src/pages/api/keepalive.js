@@ -7,22 +7,27 @@ export default async function handler(req, res) {
   res.setHeader('Expires', '0');
 
   const startedAt = Date.now();
-  try {
-    // Perform a minimal, fast query to keep Supabase warm
-    // Using the small 'settings' table if present; falls back gracefully
-    let meta = { queried: false };
-    try {
-      const { error } = await supabaseAdmin
-        .from('settings')
-        .select('id')
-        .limit(1);
-      if (!error) meta.queried = true;
-    } catch {}
+  let errorMessage = null;
 
-    const latencyMs = Date.now() - startedAt;
-    return res.status(200).json({ status: 'ok', supabaseQueried: meta.queried, latencyMs });
+  try {
+    if (!supabaseAdmin) {
+      errorMessage = 'supabaseAdmin not initialised (missing SUPABASE_SERVICE_KEY?)';
+    } else {
+      // Minimal query to register activity on the project
+      const { error } = await supabaseAdmin.from('settings').select('id').limit(1);
+      if (error) errorMessage = error.message || String(error);
+    }
   } catch (err) {
-    const latencyMs = Date.now() - startedAt;
-    return res.status(200).json({ status: 'ok', supabaseQueried: false, latencyMs });
+    errorMessage = err?.message || String(err);
   }
-} 
+
+  const latencyMs = Date.now() - startedAt;
+
+  if (errorMessage) {
+    console.error('Keepalive failed:', errorMessage);
+    // Non-2xx so cron-job.org / GitHub Actions mark the run as failed
+    return res.status(503).json({ status: 'error', supabaseQueried: false, error: errorMessage, latencyMs });
+  }
+
+  return res.status(200).json({ status: 'ok', supabaseQueried: true, latencyMs });
+}
