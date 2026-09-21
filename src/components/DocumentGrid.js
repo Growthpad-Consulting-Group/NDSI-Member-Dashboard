@@ -145,7 +145,7 @@ const DocumentGrid = ({
 
   useEffect(() => {
     if (!showSubfolderFilter) return;
-    const fetchSubfolders = async () => {
+    const loadSubfolders = async () => {
       try {
         const folders = await fetchSubfolders(`/${folder}`);
         setSubfolders(folders);
@@ -153,7 +153,7 @@ const DocumentGrid = ({
         setSubfolders([]);
       }
     };
-    fetchSubfolders();
+    loadSubfolders();
   }, [folder, showSubfolderFilter]);
 
   useEffect(() => {
