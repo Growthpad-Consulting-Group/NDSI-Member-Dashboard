@@ -1,7 +1,6 @@
 // src/pages/api/auth/register.js
 import { supabaseAdmin } from 'lib/supabase';
-import bcrypt from 'bcrypt';
-import fetch from 'node-fetch';
+import bcrypt from 'bcryptjs';
 import nodemailer from 'nodemailer';
 import { sendWelcomeEmail } from '../../../utils/emailService';
 

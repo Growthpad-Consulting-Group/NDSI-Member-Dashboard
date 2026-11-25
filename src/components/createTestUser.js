@@ -1,5 +1,5 @@
 // Run this in a one-off script or console (e.g., node script.js)
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 async function createTestUser() {
     const hashedPassword = await bcrypt.hash('testpassword123', 10); // Salt rounds: 10

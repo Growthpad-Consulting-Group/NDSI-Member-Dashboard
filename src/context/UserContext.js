@@ -49,7 +49,12 @@ export function UserProvider({ children }) {
             body: JSON.stringify({ email, password, recaptchaToken, isAutoLogin }),
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error(`Login failed: server error (${response.status}). Please try again later.`);
+        }
         if (!response.ok) {
             throw new Error(data.error || 'Login failed');
         }

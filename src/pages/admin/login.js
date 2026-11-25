@@ -39,7 +39,9 @@ export default function AdminLogin() {
                 }),
             });
 
-            const data = await response.json();
+            const data = await response.json().catch(() => ({
+                error: `Server error (${response.status}). Please try again later.`,
+            }));
             
             if (!response.ok) {
                 if (data.requiresApproval) {

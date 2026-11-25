@@ -1,8 +1,7 @@
 // src/pages/api/auth/login.js
 import { supabaseAdmin } from 'lib/supabase';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
     console.log('Login API called with method:', req.method);
@@ -11,8 +10,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { email, password, recaptchaToken, isAutoLogin } = req.body;
-    const normalizedEmail = email.toLowerCase();
+    try {
+    const { email, password, recaptchaToken, isAutoLogin } = req.body || {};
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
     
     console.log('Login attempt for:', normalizedEmail, 'hasPassword:', !!password, 'hasRecaptcha:', !!recaptchaToken);
 
@@ -40,7 +40,11 @@ export default async function handler(req, res) {
         console.log('Auto-login detected - skipping reCAPTCHA verification');
     }
 
-    try {
+        if (!supabaseAdmin || !process.env.JWT_SECRET) {
+            console.error('Login misconfigured: missing SUPABASE_SERVICE_KEY or JWT_SECRET');
+            return res.status(500).json({ error: 'Server configuration error' });
+        }
+
         const { data: user, error } = await supabaseAdmin
             .from('users')
             .select('*')

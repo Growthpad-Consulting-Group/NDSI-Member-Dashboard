@@ -1,6 +1,6 @@
 import { supabaseAdmin } from 'lib/supabase';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
